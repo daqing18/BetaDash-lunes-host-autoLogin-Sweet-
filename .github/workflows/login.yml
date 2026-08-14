@@ -55,12 +55,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          runs=$(gh run list --workflow="${{ github.workflow }}" --limit=100 --json databaseId --jq '.[].databaseId')
-          count=0
-          for run_id in $runs; do
+          gh run list --workflow="${{ github.workflow }}" --limit=100 --json databaseId | jq -r '.[].databaseId' | \
+          while read -r run_id; do
             count=$((count + 1))
             if [ $count -gt 1 ]; then
               echo "删除运行记录: $run_id"
-              gh run delete $run_id || true
+              gh run delete "$run_id" || true
             fi
           done
