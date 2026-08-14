@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "25 6 1,11,21 * *"
 
+permissions:
+  actions: write
+
 jobs:
   login:
     runs-on: ubuntu-latest
